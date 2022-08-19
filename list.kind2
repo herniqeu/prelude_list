@@ -110,11 +110,26 @@ List.product (List Nat) : Nat
 List.product List.nil : Nat.succ (Nat.zero)
 List.product (List.cons x xs) = Nat.mul x (List.product xs)
 
-// List.maximum
-// List.minimum
+List.maximum (List: Nat) : Maybe Nat
+List.maximum List.Nil = Maybe.none
+List.maximum (List.cons x List.Nil) = x
+MaximumAux (a: Bool) (x1: Nat) (x2: Nat) (xs: List Nat) = List Nat
+ MaximumAux Bool.true x1 x2 xs = List.maximum (List.cons x1 xs) 
+ MaximumAux Bool.false x1 x2 xs = List.maximum (List.cons x2 xs) 
+List.maximum (List.cons x1 (List.cons x2 xs)) = (MaximumAux (Nat.gtn x1 x2) x1 x2 xs)
 
-scanl
-scanl'
+List.minimum (List: Nat) : Maybe Nat 
+List.minimum List.nil = Maybe.none
+Minimum Aux (a: Bool) (x1: Nat) (x2: Nat) (xs: List Nat) = List Nat 
+ MinimumAux Bool.true x1 x2 xs = List.minimum (List.cons x1 xs) 
+ MinimumAux Bool.false x1 x2 xs = List.maximum (List.cons x2 xs) 
+List.maximum (List.cons x1 (List.cons x2 xs)) = (MinimumAux (Nat.ltn x1 x2) x1 x2 xs) 
+
+List.scanl (f: a -> b) (n: a) (xs : List a) : List b 
+List.scanl f n List.nil = List.cons n List.nil
+List.scanl f n (List.cons x xs) = List.cons n (List.scanl f (f n x) xs)
+
+// List.scanl
 scanl1
 scanr
 scanr1

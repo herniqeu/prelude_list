@@ -129,10 +129,9 @@ List.scanl (f: a -> b) (n: a) (xs : List a) : List b
 List.scanl f n List.nil = List.cons n List.nil
 List.scanl f n (List.cons x xs) = List.cons n (List.scanl f (f n x) xs)
 
-// List.scanl
-scanl1
-scanr
-scanr1
+List.scanl1 (f: a -> b) (xs : List a) : List b 
+List.scanl1 f List.nil = List.nil 
+List.scanl1 f (List.cons x xs) = List.scanl f x xs
 
 mapAccumL
 mapAccumR
@@ -144,14 +143,38 @@ cycle
 
 unfoldr
 
-take
-drop
-splitAt
-takeWhile
-dropWhile
-dropWhileEnd
-span
-break
+List.take <a> (n: Nat) (xs: List a) : List a 
+List.take a Nat.zero xs = List.nil 
+List.take a n List.nil = List.nil 
+List.take a (Nat.succ n) (List.cons x xs) = List.cons x (List.take a n xs) 
+
+List.drop <a> (n: Nat) (xs: List a) : List a 
+List.drop a Nat.zero xs = xs 
+List.drop a n List.nil = List.nil 
+List.drop a (Nat.succ n) (List.cons x x) = List.drop n xs
+
+List.splitat <a> (n: Nat) (xs: List a) : Pair a 
+List.splitat a n xs = Pair (List.take n xs) (List.drop n xs)
+
+List.takewhile <a> (f: a -> a) (xs: List a) = List a
+ TakewhileAux <a> (f: Bool) (x: a) (xs: List a) : List a
+ TakewhileAux a Bool.false f x xs = List.nil 
+ TakewhileAux a Bool.true f x xs = List.cons x (List.takewhile a f xs)
+List.takewhile a f (List.cons x xs) = (TakewhileAux a (f x) f x xs)
+
+List.dropwhile <a> (f: a -> a) (xs: List a) : List a 
+List.dropwhile a f List.nil = List.nil 
+ DropwhileAux <a> (b: Bool) (n: Nat) (x: a) (List: a) : List a
+ DropwhileAux a Bool.false n x xs = List.cons x xs
+ DropwhileAux a Bool.true n x xs = (List.dropwhile n xs)
+List.dropwhile a f (List.cons x xs) = (DropwhileAux a (f x) f x xs)
+
+// List.dropWhileEnd
+
+List.span (p: Nat) (xs: List Nat) : Pair Nat 
+List.span p xs = (Pair (List.takewhile p xs) (List.dropwhile p xs))
+
+// List.break
 stripPrefix
 group
 inits
